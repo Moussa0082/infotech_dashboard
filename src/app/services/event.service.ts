@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 export class EventService {
 
 private serviceUrl: string;
+private baseUrl: string = "event";
     constructor(private http: HttpClient) { 
       this.serviceUrl = environment.apiUrl;
     }

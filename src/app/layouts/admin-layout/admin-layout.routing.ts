@@ -10,16 +10,17 @@ import { ListeEventComponent } from 'src/app/pages/liste-event/liste-event.compo
 import { ListeBlogComponent } from 'src/app/pages/liste-blog/liste-blog.component';
 import { ListeCategorieComponent } from 'src/app/pages/liste-categorie/liste-categorie.component';
 import { ListeUserComponent } from 'src/app/pages/liste-user/liste-user.component';
+import { AuthGuard } from 'src/app/guards/auth.guard';
 
 export const AdminLayoutRoutes: Routes = [
-    { path: 'dashboard',      component: DashboardComponent },
-    { path: 'user-profile',   component: UserProfileComponent },
-    { path: 'tables',         component: TablesComponent },
-    { path: 'icons',          component: IconsComponent },
-    { path: 'maps',           component: MapsComponent },
-    { path: 'liste-user',           component: ListeUserComponent },
-    { path: 'liste-categorie',           component: ListeCategorieComponent },
-    { path: 'liste-blog',           component: ListeBlogComponent },
-    { path: 'liste-headimage',           component: ListeHeadimageComponent },
-    { path: 'liste-event',           component: ListeEventComponent },
+    { path: 'dashboard',      component: DashboardComponent , canActivate: [AuthGuard]},
+    { path: 'user-profile',   component: UserProfileComponent, canActivate: [AuthGuard] },
+    { path: 'tables',         component: TablesComponent , canActivate: [AuthGuard]},
+    { path: 'icons',          component: IconsComponent , canActivate: [AuthGuard]},
+    { path: 'maps',           component: MapsComponent , canActivate: [AuthGuard]},
+    { path: 'liste-user',           component: ListeUserComponent, canActivate: [AuthGuard] },
+    { path: 'liste-categorie',           component: ListeCategorieComponent , canActivate: [AuthGuard] },
+    { path: 'liste-blog',           component: ListeBlogComponent , canActivate: [AuthGuard]},
+    { path: 'liste-headimage',           component: ListeHeadimageComponent , canActivate: [AuthGuard]},
+    { path: 'liste-event',           component: ListeEventComponent , canActivate: [AuthGuard]},
 ];

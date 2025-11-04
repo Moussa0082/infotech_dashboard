@@ -27,13 +27,24 @@ export class ListeCategorieComponent implements OnInit {
        (data) => {
         this.categories = data; // selon ton format de réponse
         this.isLoading = false;
+        console.log("data charger :", data);
+
       },
       (err) => {
-        console.error(err);
+        console.log("erreur :", err);
         this.toastr.error('Erreur lors du chargement des catégories');
         this.isLoading = false;
       }
     );
+  }
+
+  reload(): void{
+    this.loadCategories(); 
+  }
+
+  editCategorie(cat: any): void {
+    this.toastr.info(`Modification de ${cat.nom}`);
+    // tu pourras ouvrir une modale ici
   }
 
   deleteCategorie(id: string): void {

@@ -51,6 +51,7 @@ export class AuthService {
 
 
     private serviceUrl: string;
+    private baseUrl: string = "auth";
     constructor(private http: HttpClient) { 
       this.serviceUrl = environment.apiUrl;
     }
@@ -59,7 +60,7 @@ export class AuthService {
    * Endpoint: POST /api-infotech/auth/signin
    */
   signIn(credentials: LoginRequest): Observable<JwtResponse> {
-    return this.http.post<JwtResponse>(`${this.serviceUrl}/signin`, credentials);
+    return this.http.post<JwtResponse>(`${this.serviceUrl}/${this.baseUrl}/signin`, credentials);
   }
 
   /**
@@ -67,7 +68,7 @@ export class AuthService {
    * Endpoint: POST /api-infotech/auth/signup
    */
   signUp(userData: SignupRequest): Observable<User> {
-    return this.http.post<User>(`${this.serviceUrl}/signup`, userData);
+    return this.http.post<User>(`${this.serviceUrl}/${this.baseUrl}/signup`, userData);
   }
 
   /**
@@ -83,7 +84,7 @@ export class AuthService {
     });
 
     // Le corps de la requête POST est vide ({}) car toutes les infos sont dans le header.
-    return this.http.post<RefreshResponse>(`${this.serviceUrl}/refresh`, {}, { headers });
+    return this.http.post<RefreshResponse>(`${this.serviceUrl}/${this.baseUrl}/refresh`, {}, { headers });
   }
 
   // --- Fonctions utilitaires (stockage sécurisé en mémoire) ---

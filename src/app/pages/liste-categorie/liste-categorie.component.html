@@ -1,33 +1,76 @@
-<div class="container mt-4">
-    <h2 class="mb-3">Liste des catégories</h2>
+<div class="card shadow " style="margin-top: 10%;">
+    <div class="card-header border-0 d-flex justify-content-between align-items-center">
+      <h3 class="mb-0">Liste des Catégories</h3>
+      <button class="btn btn-sm btn-primary" (click)="reload()">
+        <i class="fas fa-sync-alt"></i> Rafraîchir
+      </button>
+    </div>
   
-    <div *ngIf="isLoading" class="text-center">
+    <div *ngIf="isLoading" class="text-center my-4">
       <div class="spinner-border text-primary"></div>
       <p>Chargement...</p>
     </div>
   
-    <table class="table table-striped" *ngIf="!isLoading && categories.length > 0">
-      <thead>
-        <tr>
-          <th>Nom</th>
-          <th>Description</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let cat of categories">
-          <td>{{ cat.nom }}</td>
-          <td>{{ cat.description }}</td>
-          <td>
-            <button class="btn btn-sm btn-danger" (click)="deleteCategorie(cat.idCategorie)">
-              <i class="fas fa-trash"></i> Supprimer
-            </button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive" *ngIf="!isLoading && categories.length > 0">
+      <table class="table align-items-center table-flush">
+        <thead class="thead-light">
+          <tr>
+            <th scope="col">Nom</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
+            <th scope="col">Status</th>
+            <th scope="col" class="text-right">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let cat of categories">
+            <th scope="row">
+              <div class="media align-items-center">
+                <a href="javascript:void(0)" class="avatar rounded-circle mr-3">
+                  <img
+                    alt="Image catégorie"
+                    [src]="cat.image || 'assets/img/theme/bootstrap.jpg'"
+                    class="rounded-circle"
+                  />
+                </a>
+                <div class="media-body">
+                  <span class="mb-0 text-sm">{{ cat.nom }}</span>
+                </div>
+              </div>
+            </th>
+            <td>{{ cat.description }}</td>
+            <td>
+              <img
+                *ngIf="cat.image"
+                [src]="cat.image"
+                alt="Catégorie"
+                class="img-thumbnail"
+                style="width: 60px; height: 60px; object-fit: cover;"
+              />
+              <span *ngIf="!cat.image" class="text-muted">Aucune</span>
+            </td>
+            <td>
+              <span class="badge badge-dot mr-4">
+                <i class="bg-success"></i> Active
+              </span>
+            </td>
+            <td class="text-right">
+              <div ngbDropdown placement="bottom-right">
+                <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
+                  <i class="fas fa-ellipsis-v text-dark"></i>
+                </a>
+                <div ngbDropdownMenu class="dropdown-menu-right dropdown-menu-arrow">
+                  <a class="dropdown-item" href="javascript:void(0)" (click)="editCategorie(cat)">Modifier</a>
+                  <a class="dropdown-item text-danger" href="javascript:void(0)" (click)="deleteCategorie(cat.idCategorie)">Supprimer</a>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   
-    <div *ngIf="!isLoading && categories.length === 0" class="alert alert-info">
+    <div *ngIf="!isLoading && categories.length === 0" class="alert alert-info text-center m-3">
       Aucune catégorie trouvée.
     </div>
   </div>

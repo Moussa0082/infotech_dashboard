@@ -10,6 +10,7 @@ export class HeadImageService {
 
 
     private serviceUrl: string;
+    private baseUrl: string = "headImage";
       constructor(private http: HttpClient) { 
         this.serviceUrl = environment.apiUrl;
       }
@@ -24,14 +25,14 @@ export class HeadImageService {
     if (ownerId) formData.append('ownerId', ownerId);
     if (imageFile) formData.append('image', imageFile);
 
-    return this.http.post(`${this.serviceUrl}/create`, formData);
+    return this.http.post(`${this.serviceUrl}/${this.baseUrl}/create`, formData);
   }
 
   /**
    * Récupérer l'image d'en-tête d'une page donnée
    */
   getHeadImageByPage(pageName: string): Observable<any> {
-    return this.http.get(`${this.serviceUrl}/page/${pageName}`);
+    return this.http.get(`${this.serviceUrl}/${this.baseUrl}/page/${pageName}`);
   }
 
   /**
@@ -42,13 +43,13 @@ export class HeadImageService {
     if (description) formData.append('description', description);
     if (imageFile) formData.append('image', imageFile);
 
-    return this.http.put(`${this.serviceUrl}/update/${idHeadImage}`, formData);
+    return this.http.put(`${this.serviceUrl}/${this.baseUrl}/update/${idHeadImage}`, formData);
   }
 
   /**
    * Supprimer une image d'en-tête
    */
   deleteHeadImage(idHeadImage: string): Observable<any> {
-    return this.http.delete(`${this.serviceUrl}/delete/${idHeadImage}`);
+    return this.http.delete(`${this.serviceUrl}/${this.baseUrl}/delete/${idHeadImage}`);
   }
 }
