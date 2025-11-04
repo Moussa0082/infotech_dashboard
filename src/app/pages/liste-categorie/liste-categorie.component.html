@@ -1,0 +1,34 @@
+<div class="container mt-4">
+    <h2 class="mb-3">Liste des catégories</h2>
+  
+    <div *ngIf="isLoading" class="text-center">
+      <div class="spinner-border text-primary"></div>
+      <p>Chargement...</p>
+    </div>
+  
+    <table class="table table-striped" *ngIf="!isLoading && categories.length > 0">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let cat of categories">
+          <td>{{ cat.nom }}</td>
+          <td>{{ cat.description }}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteCategorie(cat.idCategorie)">
+              <i class="fas fa-trash"></i> Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  
+    <div *ngIf="!isLoading && categories.length === 0" class="alert alert-info">
+      Aucune catégorie trouvée.
+    </div>
+  </div>
+  
