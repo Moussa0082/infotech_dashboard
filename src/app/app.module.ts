@@ -1,7 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -22,6 +22,9 @@ import { AddUpCategorieComponent } from './pages/add-up-categorie/add-up-categor
 import { AddUpHeadeimageComponent } from './pages/add-up-headeimage/add-up-headeimage.component';
 import { AddUpBlogComponent } from './pages/add-up-blog/add-up-blog.component';
 import { AddUpEventComponent } from './pages/add-up-event/add-up-event.component';
+import { CommonModule } from '@angular/common';
+import { AuthInterceptor } from './services/auth.interceptor';
+import { ToastrModule } from 'ngx-toastr';
 
 
 @NgModule({
@@ -31,8 +34,15 @@ import { AddUpEventComponent } from './pages/add-up-event/add-up-event.component
     HttpClientModule,
     ComponentsModule,
     NgbModule,
+    ReactiveFormsModule,
+    CommonModule,
     RouterModule,
-    AppRoutingModule
+    AppRoutingModule,
+    ToastrModule.forRoot({
+      timeOut: 3000,
+      positionClass: 'toast-bottom-right',
+      preventDuplicates: true,
+    })
   ],
   declarations: [
     AppComponent,
@@ -49,7 +59,13 @@ import { AddUpEventComponent } from './pages/add-up-event/add-up-event.component
     AddUpBlogComponent,
     AddUpEventComponent
   ],
-  providers: [],
+  providers: [
+    { 
+      provide: HTTP_INTERCEPTORS, 
+      useClass: AuthInterceptor, 
+      multi: true 
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -9,13 +9,13 @@ import { CategorieService } from 'src/app/services/categorie.service';
   styleUrls: ['./liste-categorie.component.scss']
 })
 export class ListeCategorieComponent implements OnInit {
+  categories: Categorie[] = [];
+  isLoading = true;
 
   constructor(
     private categorieService: CategorieService,
     private toastr: ToastrService
   ) {}
-  categories: Categorie[] = [];
-  isLoading = true;
 
   ngOnInit(): void {
     this.loadCategories();
@@ -23,43 +23,52 @@ export class ListeCategorieComponent implements OnInit {
 
   loadCategories(): void {
     this.isLoading = true;
-    this.categorieService.getAll().subscribe(
-       (data) => {
-        this.categories = data; // selon ton format de réponse
+    this.categorieService.getAll().subscribe({
+      next: (data) => {
+        this.categories = data;
         this.isLoading = false;
-        console.log("data charger :", data);
-
+        console.log("Data chargé :", data);
+        this.toastr.success('Catégories chargées avec succès');
       },
-      (err) => {
-        console.log("erreur :", err);
-        this.toastr.error('Erreur lors du chargement des catégories');
+      error: (err) => {
+        console.error("Erreur détaillée :", err);
         this.isLoading = false;
+        
+        // Better error handling
+        if (err.status === 0) {
+          this.toastr.error('Impossible de se connecter au serveur');
+        } else if (err.status === 401) {
+          this.toastr.error('Authentification requise');
+        } else if (err.status === 403) {
+          this.toastr.error('Accès non autorisé');
+        } else {
+          this.toastr.error('Erreur lors du chargement des catégories');
+        }
       }
-    );
+    });
   }
 
-  reload(): void{
+  reload(): void {
     this.loadCategories(); 
   }
 
-  editCategorie(cat: any): void {
+  editCategorie(cat: Categorie): void {
     this.toastr.info(`Modification de ${cat.nom}`);
-    // tu pourras ouvrir une modale ici
+    // Implémentez la logique de modification ici
   }
 
   deleteCategorie(id: string): void {
     if (confirm('Voulez-vous vraiment supprimer cette catégorie ?')) {
-      this.categorieService.delete(id).subscribe(
-        (res) => {
-          this.toastr.success('Catégorie supprimée');
+      this.categorieService.delete(id).subscribe({
+        next: () => {
+          this.toastr.success('Catégorie supprimée avec succès');
           this.loadCategories();
         },
-        (err) => {
-          console.error(err);
+        error: (err) => {
+          console.error('Erreur suppression:', err);
           this.toastr.error('Erreur lors de la suppression');
         }
-      );
+      });
     }
   }
-
 }

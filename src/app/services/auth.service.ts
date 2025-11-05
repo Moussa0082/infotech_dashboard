@@ -59,7 +59,7 @@ export class AuthService {
    * 1. Connexion de l'utilisateur
    * Endpoint: POST /api-infotech/auth/signin
    */
-  signIn(credentials: LoginRequest): Observable<JwtResponse> {
+  signIn(credentials: any): Observable<JwtResponse> {
     return this.http.post<JwtResponse>(`${this.serviceUrl}/${this.baseUrl}/signin`, credentials);
   }
 
@@ -98,11 +98,21 @@ export class AuthService {
     this.accessToken = response.token;
     this.refreshToken = response.refreshToken;
     this.currentUsername = response.username;
-    // Pour persister le refreshToken entre les rechargements de page, on utilise le sessionStorage (plus sûr que localStorage).
-    // Idéalement, le refreshToken devrait être dans un cookie HTTP-only géré par le backend.
+  
+    // ✅ Sauvegarde complète dans le sessionStorage
+    sessionStorage.setItem('token', response.token);
     sessionStorage.setItem('refreshToken', response.refreshToken);
     sessionStorage.setItem('username', response.username);
+    sessionStorage.setItem('email', response.email);
+
+    // Pour la navbar :
+  const user = {
+    username: response.username,
+    email: response.email
+  };
+  sessionStorage.setItem('user', JSON.stringify(user));
   }
+  
 
   /**
    * Efface tous les tokens lors de la déconnexion.
@@ -111,6 +121,9 @@ export class AuthService {
     this.accessToken = null;
     this.refreshToken = null;
     this.currentUsername = null;
+    sessionStorage.removeItem('user');
+    sessionStorage.removeItem('email');
+    sessionStorage.removeItem('token');
     sessionStorage.removeItem('refreshToken');
     sessionStorage.removeItem('username');
   }
@@ -133,8 +146,12 @@ export class AuthService {
   /**
    * Vérifie si l'utilisateur est authentifié.
    */
+  // public isAuthenticated(): boolean {
+  //   return !!this.getAccessToken() || !!this.getRefreshToken();
+  // }
   public isAuthenticated(): boolean {
-    return !!this.getAccessToken() || !!this.getRefreshToken();
+    return !!this.accessToken || !!sessionStorage.getItem('refreshToken');
   }
+  
 
 }

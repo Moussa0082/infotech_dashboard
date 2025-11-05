@@ -12,12 +12,19 @@ export class NavbarComponent implements OnInit {
   public focus;
   public listTitles: any[];
   public location: Location;
+  user: any = null; // 👈 utilisateur connecté
+
   constructor(location: Location,  private element: ElementRef, private router: Router) {
     this.location = location;
   }
 
   ngOnInit() {
     this.listTitles = ROUTES.filter(listTitle => listTitle);
+     // 🔹 Récupération du user depuis la session
+     const userData = sessionStorage.getItem('user');
+     if (userData) {
+       this.user = JSON.parse(userData);
+     }
   }
   getTitle(){
     var titlee = this.location.prepareExternalUrl(this.location.path());
@@ -31,6 +38,11 @@ export class NavbarComponent implements OnInit {
         }
     }
     return 'Dashboard';
+  }
+
+  logout() {
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 
 }
