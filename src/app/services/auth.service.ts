@@ -1,9 +1,8 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { User } from '../models/User';
-import { environment } from 'src/environments/environment';
-
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
+import { User } from "../models/User";
+import { environment } from "src/environments/environment";
 
 // 1. Requête de connexion (LoginRequest)
 interface LoginRequest {
@@ -20,6 +19,7 @@ interface SignupRequest {
   nom: string;
   prenom: string;
   telephone: string;
+  role: string;
 }
 
 // 3. Réponse de Connexion (JwtResponse)
@@ -37,30 +37,29 @@ interface RefreshResponse {
   type: string; // "Bearer"
 }
 
-
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthService {
-
-
   // Nouveaux champs privés pour stocker les tokens en mémoire
   private accessToken: string | null = null;
   private refreshToken: string | null = null;
   public currentUsername: string | null = null;
 
-
-    private serviceUrl: string;
-    private baseUrl: string = "auth";
-    constructor(private http: HttpClient) { 
-      this.serviceUrl = environment.apiUrl;
-    }
+  private serviceUrl: string;
+  private baseUrl: string = "auth";
+  constructor(private http: HttpClient) {
+    this.serviceUrl = environment.apiUrl;
+  }
   /**
    * 1. Connexion de l'utilisateur
    * Endpoint: POST /api-infotech/auth/signin
    */
   signIn(credentials: any): Observable<JwtResponse> {
-    return this.http.post<JwtResponse>(`${this.serviceUrl}/${this.baseUrl}/signin`, credentials);
+    return this.http.post<JwtResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/signin`,
+      credentials
+    );
   }
 
   /**
@@ -68,7 +67,10 @@ export class AuthService {
    * Endpoint: POST /api-infotech/auth/signup
    */
   signUp(userData: SignupRequest): Observable<User> {
-    return this.http.post<User>(`${this.serviceUrl}/${this.baseUrl}/signup`, userData);
+    return this.http.post<User>(
+      `${this.serviceUrl}/${this.baseUrl}/signup`,
+      userData
+    );
   }
 
   /**
@@ -78,13 +80,17 @@ export class AuthService {
    *
    * @param refreshToken Le jeton de rafraîchissement stocké.
    */
-   public refreshTokens(refreshToken: string): Observable<RefreshResponse> {
+  public refreshTokens(refreshToken: string): Observable<RefreshResponse> {
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${refreshToken}`
+      Authorization: `Bearer ${refreshToken}`,
     });
 
     // Le corps de la requête POST est vide ({}) car toutes les infos sont dans le header.
-    return this.http.post<RefreshResponse>(`${this.serviceUrl}/${this.baseUrl}/refresh`, {}, { headers });
+    return this.http.post<RefreshResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/refresh`,
+      {},
+      { headers }
+    );
   }
 
   // --- Fonctions utilitaires (stockage sécurisé en mémoire) ---
@@ -98,21 +104,20 @@ export class AuthService {
     this.accessToken = response.token;
     this.refreshToken = response.refreshToken;
     this.currentUsername = response.username;
-  
+
     // ✅ Sauvegarde complète dans le sessionStorage
-    sessionStorage.setItem('token', response.token);
-    sessionStorage.setItem('refreshToken', response.refreshToken);
-    sessionStorage.setItem('username', response.username);
-    sessionStorage.setItem('email', response.email);
+    sessionStorage.setItem("token", response.token);
+    sessionStorage.setItem("refreshToken", response.refreshToken);
+    sessionStorage.setItem("username", response.username);
+    sessionStorage.setItem("email", response.email);
 
     // Pour la navbar :
-  const user = {
-    username: response.username,
-    email: response.email
-  };
-  sessionStorage.setItem('user', JSON.stringify(user));
+    const user = {
+      username: response.username,
+      email: response.email,
+    };
+    sessionStorage.setItem("user", JSON.stringify(user));
   }
-  
 
   /**
    * Efface tous les tokens lors de la déconnexion.
@@ -121,11 +126,11 @@ export class AuthService {
     this.accessToken = null;
     this.refreshToken = null;
     this.currentUsername = null;
-    sessionStorage.removeItem('user');
-    sessionStorage.removeItem('email');
-    sessionStorage.removeItem('token');
-    sessionStorage.removeItem('refreshToken');
-    sessionStorage.removeItem('username');
+    sessionStorage.removeItem("user");
+    sessionStorage.removeItem("email");
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("refreshToken");
+    sessionStorage.removeItem("username");
   }
 
   /**
@@ -140,7 +145,7 @@ export class AuthService {
    * Récupère le jeton de rafraîchissement (refreshToken) depuis le sessionStorage.
    */
   public getRefreshToken(): string | null {
-    return sessionStorage.getItem('refreshToken');
+    return sessionStorage.getItem("refreshToken");
   }
 
   /**
@@ -150,8 +155,6 @@ export class AuthService {
   //   return !!this.getAccessToken() || !!this.getRefreshToken();
   // }
   public isAuthenticated(): boolean {
-    return !!this.accessToken || !!sessionStorage.getItem('refreshToken');
+    return !!this.accessToken || !!sessionStorage.getItem("refreshToken");
   }
-  
-
 }

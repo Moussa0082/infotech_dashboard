@@ -12,7 +12,14 @@
     </div>
   </div>
   <div class="separator separator-bottom separator-skew zindex-100">
-    <svg x="0" y="0" viewBox="0 0 2560 100" preserveAspectRatio="none" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <svg
+      x="0"
+      y="0"
+      viewBox="0 0 2560 100"
+      preserveAspectRatio="none"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <polygon class="fill-default" points="2560 0 2560 100 0 100"></polygon>
     </svg>
   </div>
@@ -22,7 +29,6 @@
   <div class="row justify-content-center">
     <div class="col-lg-5 col-md-7">
       <div class="card bg-secondary shadow border-0">
-       
         <div class="card-body px-lg-5 py-lg-5">
           <div class="text-center text-muted mb-4">
             <small>Se connecter</small>
@@ -31,36 +37,50 @@
             <div class="form-group mb-3">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-email-83"></i></span>
+                  <span class="input-group-text"
+                    ><i class="ni ni-email-83"></i
+                  ></span>
                 </div>
-                <input class="form-control" formControlName="usernameOrEmail"  placeholder="Username/Email" type="email">
+                <input
+                  class="form-control"
+                  formControlName="identifiant"
+                  placeholder="Username"
+                  type="email"
+                />
               </div>
             </div>
             <div class="form-group">
               <div class="input-group input-group-alternative">
                 <div class="input-group-prepend">
-                  <span class="input-group-text"><i class="ni ni-lock-circle-open"></i></span>
+                  <span class="input-group-text"
+                    ><i class="ni ni-lock-circle-open"></i
+                  ></span>
                 </div>
-                <input class="form-control" formControlName="password" placeholder="Mot de passe" type="password">
+                <input
+                  class="form-control"
+                  formControlName="password"
+                  placeholder="Mot de passe"
+                  type="password"
+                />
               </div>
             </div>
             <div class="text-center">
-              <button type="submit" class="btn btn-primary my-4">Se connecter</button>
+              <button type="submit" class="btn btn-primary my-4">
+                Se connecter
+              </button>
             </div>
           </form>
         </div>
       </div>
 
-      
       <div class="row mt-3">
         <!-- <div class="col-6"> -->
-          <!-- <a href="javascript:void(0)" class="text-light"><small>Forgot password?</small></a> -->
+        <!-- <a href="javascript:void(0)" class="text-light"><small>Forgot password?</small></a> -->
         <!-- </div> -->
         <!-- <div class="col-6 text-right">
           <a routerLink="/register"  class="text-light"><small>Creer un compte</small></a>
         </div> -->
       </div>
-
     </div>
   </div>
 </div>
