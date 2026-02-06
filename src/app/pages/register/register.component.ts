@@ -16,6 +16,12 @@ export class RegisterComponent implements OnInit {
 
   registerForm!: FormGroup;
 
+  showPassword = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+
   ngOnInit() {
     this.registerForm = this.fb.group({
       nom: ["", Validators.required],

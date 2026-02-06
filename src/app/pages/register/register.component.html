@@ -63,7 +63,7 @@
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"
-                    ><i class="ni ni-hat-3"></i
+                    ><i class="ni ni-single-02"></i
                   ></span>
                 </div>
                 <input
@@ -74,11 +74,12 @@
                 />
               </div>
             </div>
+
             <div class="form-group">
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"
-                    ><i class="ni ni-hat-3"></i
+                    ><i class="ni ni-circle-08"></i
                   ></span>
                 </div>
                 <input
@@ -89,11 +90,12 @@
                 />
               </div>
             </div>
+
             <div class="form-group">
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"
-                    ><i class="ni ni-hat-3"></i
+                    ><i class="ni ni-tag"></i
                   ></span>
                 </div>
                 <input
@@ -123,7 +125,7 @@
               <div class="input-group input-group-alternative mb-3">
                 <div class="input-group-prepend">
                   <span class="input-group-text"
-                    ><i class="ni ni-phone"></i
+                    ><i class="ni ni-mobile-button"></i
                   ></span>
                 </div>
                 <input
@@ -144,7 +146,7 @@
                 <select class="form-control" formControlName="role">
                   <option value="" disabled selected>Choisir un rôle</option>
                   <option value="ADMIN">Administrateur</option>
-                  <option value="SUPERADMIN">Super Administrateur</option>
+                  <!-- <option value="SUPERADMIN">Super Administrateur</option> -->
                 </select>
               </div>
             </div>
@@ -158,9 +160,23 @@
                 <input
                   class="form-control"
                   placeholder="Password"
-                  type="password"
+                  [type]="showPassword ? 'text' : 'password'"
                   formControlName="password"
                 />
+                <div
+                  class="input-group-append"
+                  (click)="togglePasswordVisibility()"
+                  style="cursor: pointer"
+                >
+                  <span class="input-group-text">
+                    <i
+                      class="ni"
+                      [ngClass]="
+                        showPassword ? 'ni-zoom-split-in' : 'ni-zoom-split-out'
+                      "
+                    ></i>
+                  </span>
+                </div>
               </div>
             </div>
             <div class="text-muted font-italic">
