@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from "@angular/core";
 import { Router } from "@angular/router";
 import { AuthService } from "src/app/services/auth.service";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { User } from "src/app/models/User";
 
 @Component({
   selector: "app-register",
@@ -37,7 +36,6 @@ export class RegisterComponent implements OnInit {
   onRegister() {
     if (this.registerForm.valid) {
       const signupData = this.registerForm.value;
-
       this.authService.signUp(signupData).subscribe({
         next: (response) => {
           console.log("Inscription réussie !", response);
