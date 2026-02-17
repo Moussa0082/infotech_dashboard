@@ -29,19 +29,19 @@ export class EventService {
     description: string,
     lieu: string,
     dateDebut: string,
-    organisateur: string,
-    dateFin: string,
     categorieId: string,
+    dateFin: string,
+    organisateur: string,
     imageFile: File | null
   ): Observable<CResponse> {
     const formData = new FormData();
     formData.append("titre", titre);
     formData.append("description", description);
-    formData.append("organisateur", organisateur);
     formData.append("lieu", lieu);
     formData.append("dateDebut", dateDebut);
-    formData.append("dateFin", dateFin);
     formData.append("idCategorie", categorieId);
+    formData.append("dateFin", dateFin);
+    formData.append("organisateur", organisateur);
     formData.append("active", "true");
 
     // Ajoute le fichier image s'il existe
@@ -64,21 +64,22 @@ export class EventService {
     idEvent: string,
     titre: string,
     description: string,
-    organisateur: string,
     lieu: string,
     dateDebut: string,
-    dateFin: string,
     categorieId: string,
+    dateFin: string,
+    organisateur: string,
     imageFile: File | null
   ): Observable<CResponse> {
     const formData = new FormData();
     formData.append("titre", titre);
     formData.append("description", description);
-    formData.append("organisateur", organisateur);
     formData.append("lieu", lieu);
     formData.append("dateDebut", dateDebut);
+    formData.append("idCategorie", categorieId);
     formData.append("dateFin", dateFin);
-    formData.append("categorie_id", categorieId);
+    formData.append("organisateur", organisateur);
+    formData.append("active", "true");
 
     if (imageFile) {
       formData.append("image", imageFile, imageFile.name);

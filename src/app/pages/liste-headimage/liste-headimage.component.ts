@@ -29,6 +29,8 @@ export class ListeHeadimageComponent implements OnInit {
     "About1",
     "About2",
     "About3",
+    "Work",
+    "Media",
   ];
 
   ngOnInit() {

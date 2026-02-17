@@ -77,11 +77,11 @@ export class ListeEventComponent implements OnInit {
           idEvent,
           titre,
           description,
-          organisateur,
           lieu,
           dateDebut,
-          dateFin,
           categorieId,
+          dateFin,
+          organisateur,
           this.selectedFile
         )
         .subscribe({
@@ -96,11 +96,11 @@ export class ListeEventComponent implements OnInit {
         .createEvent(
           titre,
           description,
-          organisateur,
           lieu,
           dateDebut,
-          dateFin,
           categorieId,
+          dateFin,
+          organisateur,
           this.selectedFile
         )
         .subscribe({

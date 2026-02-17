@@ -25,6 +25,7 @@ import { AddUpEventComponent } from './pages/add-up-event/add-up-event.component
 import { CommonModule } from '@angular/common';
 import { AuthInterceptor } from './services/auth.interceptor';
 import { ToastrModule } from 'ngx-toastr';
+import { ContactComponent } from './pages/contact/contact.component';
 
 
 @NgModule({
@@ -57,7 +58,8 @@ import { ToastrModule } from 'ngx-toastr';
     AddUpCategorieComponent,
     AddUpHeadeimageComponent,
     AddUpBlogComponent,
-    AddUpEventComponent
+    AddUpEventComponent,
+    ContactComponent
   ],
   providers: [
     { 
