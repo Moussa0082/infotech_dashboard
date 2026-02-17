@@ -14,7 +14,7 @@ import { Router } from "@angular/router";
 })
 export class NavbarComponent implements OnInit {
   public focus: any;
-  public listTitles: any[];
+  public listTitles: any[] = [];
   public location: Location;
   user: any = null; // 👈 utilisateur connecté
 

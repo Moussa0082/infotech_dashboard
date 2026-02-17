@@ -1,70 +1,152 @@
-<div class="card shadow" style="margin-top: 10%;">
-    <div class="card-header border-0 d-flex justify-content-between align-items-center">
-      <h3 class="mb-0">Liste des Catégories</h3>
-      <button class="btn btn-sm btn-primary" (click)="reload()">
-        <i class="fas fa-sync-alt"></i> Rafraîchir
-      </button>
-    </div>
-  
-    <div *ngIf="isLoading" class="text-center my-4">
-      <div class="spinner-border text-primary"></div>
-      <p>Chargement...</p>
-    </div>
-  
-    <div class="table-responsive" *ngIf="!isLoading && categories.length > 0">
-      <table class="table align-items-center table-flush">
-        <thead class="thead-light">
-          <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Description</th>
-            <!-- <th scope="col">Image</th> -->
-            <th scope="col">Status</th>
-            <th scope="col" class="text-right">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let cat of categories">
-            <td>
-              <div class="media align-items-center">
-                <div class="media-body">
-                  <span class="mb-0 text-sm">{{ cat.nom }}</span>
-                </div>
-              </div>
-            </td>
-            <td>{{ cat.description }}</td>
-            <!-- <td>
-              <img
-                *ngIf="cat.image"
-                [src]="cat.image"
-                alt="Catégorie"
-                class="img-thumbnail"
-                style="width: 60px; height: 60px; object-fit: cover;"
-              />
-              <span *ngIf="!cat.image" class="text-muted">Aucune image</span>
-            </td> -->
-            <td>
-              <span class="badge badge-dot mr-4">
-                <i class="bg-success"></i> Active
-              </span>
-            </td>
-            <td class="text-right">
-              <div ngbDropdown placement="bottom-right">
-                <a class="btn btn-sm btn-icon-only text-light" ngbDropdownToggle>
-                  <i class="fas fa-ellipsis-v text-dark"></i>
-                </a>
-                <div ngbDropdownMenu class="dropdown-menu-right dropdown-menu-arrow">
-                  <a class="dropdown-item" href="javascript:void(0)" (click)="editCategorie(cat)">Modifier</a>
-                  <a class="dropdown-item text-danger" href="javascript:void(0)" 
-                     (click)="deleteCategorie(cat.idCategorie)">Supprimer</a>
-                </div>
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  
-    <div *ngIf="!isLoading && categories.length === 0" class="alert alert-info text-center m-3">
-      Aucune catégorie trouvée.
+<div class="header bg-gradient-info pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body text-center mb-5">
+      <h1 class="text-white">
+        <i class="ni ni-folder-17 mr-3"></i>Gestion des Catégories
+      </h1>
     </div>
   </div>
+</div>
+
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-4 mb-5">
+      <div class="card shadow border-0">
+        <div class="card-header bg-white border-0">
+          <h3 class="mb-0 text-primary">
+            {{ isEdit ? "Modifier" : "Créer" }} la catégorie
+          </h3>
+        </div>
+        <div class="card-body bg-secondary">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label class="form-control-label">Nom</label>
+              <input
+                type="text"
+                [(ngModel)]="form.nom"
+                name="nom"
+                class="form-control"
+                placeholder="Nom de la catégorie"
+              />
+            </div>
+
+            <div class="form-group">
+              <label class="form-control-label">Type de contenu</label>
+              <select
+                [(ngModel)]="form.typeCategorie"
+                name="type"
+                class="form-control"
+              >
+                <option *ngFor="let t of typesDisponibles" [value]="t">
+                  {{ t }}
+                </option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-control-label">Description</label>
+              <textarea
+                [(ngModel)]="form.description"
+                name="description"
+                rows="3"
+                class="form-control"
+              ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-info w-100 shadow-sm mt-3">
+              {{ isEdit ? "Mettre à jour" : "Enregistrer" }}
+            </button>
+            <button
+              *ngIf="isEdit"
+              type="button"
+              (click)="resetForm()"
+              class="btn btn-link text-muted w-100"
+            >
+              Annuler
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="card shadow">
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th>Nom & Type</th>
+                <th>Relations</th>
+                <th>Statut</th>
+                <th class="text-right">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let cat of categories">
+                <td>
+                  <div class="media align-items-center">
+                    <div class="media-body">
+                      <span
+                        class="name mb-0 text-sm font-weight-bold d-block"
+                        >{{ cat.nom }}</span
+                      >
+                      <small
+                        class="badge badge-pill badge-secondary text-uppercase"
+                        >{{ cat.typeCategorie }}</small
+                      >
+                    </div>
+                  </div>
+                </td>
+                <td>
+                  <div class="d-flex flex-column">
+                    <small class="text-muted"
+                      ><i class="ni ni-book-bookmark mr-1"></i>
+                      {{ cat.blogs?.length || 0 }} Blogs</small
+                    >
+                    <small class="text-muted"
+                      ><i class="ni ni-calendar-grid-58 mr-1"></i>
+                      {{ cat.events?.length || 0 }} Events</small
+                    >
+                  </div>
+                </td>
+                <td>
+                  <label class="custom-toggle">
+                    <input
+                      type="checkbox"
+                      [checked]="cat.active"
+                      (change)="toggleStatus(cat)"
+                    />
+                    <span class="custom-toggle-slider rounded-circle"></span>
+                  </label>
+                </td>
+                <td class="text-right">
+                  <div ngbDropdown placement="bottom-right">
+                    <a
+                      class="btn btn-sm btn-icon-only text-light"
+                      ngbDropdownToggle
+                    >
+                      <i class="fas fa-ellipsis-v"></i>
+                    </a>
+                    <div
+                      ngbDropdownMenu
+                      class="dropdown-menu-right dropdown-menu-arrow"
+                    >
+                      <a class="dropdown-item" (click)="prepareEdit(cat)"
+                        ><i class="fas fa-edit text-primary"></i> Modifier</a
+                      >
+                      <a
+                        class="dropdown-item"
+                        (click)="onDelete(cat.idCategorie)"
+                        ><i class="fas fa-trash text-danger"></i> Supprimer</a
+                      >
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

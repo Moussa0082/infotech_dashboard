@@ -93,13 +93,6 @@ export class AuthService {
     );
   }
 
-  // --- Fonctions utilitaires (stockage sécurisé en mémoire) ---
-
-  /**
-   * Méthode pour stocker les tokens en mémoire de session du service (plus sécurisé que localStorage).
-   *
-   * @param response La réponse de connexion contenant les tokens.
-   */
   public saveTokens(response: JwtResponse) {
     this.accessToken = response.token;
     this.refreshToken = response.refreshToken;
@@ -133,28 +126,24 @@ export class AuthService {
     sessionStorage.removeItem("username");
   }
 
-  /**
-   * Récupère le jeton d'accès (accessToken) depuis la mémoire du service.
-   */
   public getAccessToken(): string | null {
-    // Si l'accessToken est en mémoire, on le renvoie.
+    // Si la variable en mémoire est vide, on tente de la récupérer dans le storage
+    if (!this.accessToken) {
+      this.accessToken = sessionStorage.getItem("token");
+    }
     return this.accessToken;
   }
 
-  /**
-   * Récupère le jeton de rafraîchissement (refreshToken) depuis le sessionStorage.
-   */
   public getRefreshToken(): string | null {
     return sessionStorage.getItem("refreshToken");
   }
 
-  /**
-   * Vérifie si l'utilisateur est authentifié.
-   */
-  // public isAuthenticated(): boolean {
-  //   return !!this.getAccessToken() || !!this.getRefreshToken();
-  // }
   public isAuthenticated(): boolean {
     return !!this.accessToken || !!sessionStorage.getItem("refreshToken");
+  }
+
+  public updateAccessToken(newToken: string) {
+    this.accessToken = newToken;
+    sessionStorage.setItem("token", newToken);
   }
 }

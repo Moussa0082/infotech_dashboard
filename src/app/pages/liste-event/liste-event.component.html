@@ -1,1 +1,183 @@
-<p>liste-event works!</p>
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body text-center mb-5">
+      <h1 class="text-white">
+        <i class="ni ni-calendar-grid-58 mr-3"></i>Gestion des Événements
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-4 mb-5">
+      <div class="card shadow border-0">
+        <div class="card-header bg-white">
+          <h3 class="mb-0">
+            {{ isEdit ? "Modifier" : "Ajouter" }} un événement
+          </h3>
+        </div>
+        <div class="card-body bg-secondary">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label class="form-control-label">Titre</label>
+              <input
+                type="text"
+                [(ngModel)]="form.titre"
+                name="titre"
+                class="form-control"
+                placeholder="Titre de l'event"
+              />
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-control-label">Lieu</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.lieu"
+                    name="lieu"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-control-label">Catégorie</label>
+                  <select
+                    [(ngModel)]="form.categorieId"
+                    name="cat"
+                    class="form-control"
+                  >
+                    <option
+                      *ngFor="let c of categories"
+                      [value]="c.idCategorie"
+                    >
+                      {{ c.nom }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-control-label">Date Début</label>
+                  <input
+                    type="datetime-local"
+                    [(ngModel)]="form.dateDebut"
+                    name="debut"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-control-label">Date Fin</label>
+                  <input
+                    type="datetime-local"
+                    [(ngModel)]="form.dateFin"
+                    name="fin"
+                    class="form-control"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label class="form-control-label">Organisateur</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.organisateur"
+                    name="organisateur"
+                    class="form-control"
+                    placeholder="Nom de l'entité ou personne"
+                  />
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-control-label">Description</label>
+              <textarea
+                [(ngModel)]="form.description"
+                name="desc"
+                rows="3"
+                class="form-control"
+              ></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-control-label">Image</label>
+              <div class="custom-file">
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="custom-file-input"
+                  id="eventFile"
+                />
+                <label class="custom-file-label" for="eventFile">{{
+                  fileName || "Choisir..."
+                }}</label>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100 mt-3">
+              {{ isEdit ? "Mettre à jour" : "Enregistrer" }}
+            </button>
+            <button
+              *ngIf="isEdit"
+              type="button"
+              (click)="resetForm()"
+              class="btn btn-link text-muted w-100"
+            >
+              Annuler
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="row">
+        <div class="col-md-6 mb-4" *ngFor="let event of events">
+          <div class="card shadow border-0 overflow-hidden">
+            <img
+              [src]="utils.getImageUrl(event.image)"
+              class="card-img-top"
+              style="height: 150px; object-fit: cover"
+            />
+            <div class="card-body">
+              <div
+                class="d-flex justify-content-between align-items-center mb-2"
+              >
+                <h4 class="mb-0">{{ event.titre }}</h4>
+                <span class="badge badge-pill badge-info">{{
+                  event.categorie.titre
+                }}</span>
+              </div>
+              <p class="text-xs text-muted mb-2">
+                <i class="ni ni-pin-3 mr-1"></i> {{ event.lieu }}
+              </p>
+              <p class="text-sm text-dark mb-3">
+                {{ event.description | slice : 0 : 100 }}...
+              </p>
+              <div class="d-flex justify-content-between border-top pt-3">
+                <button
+                  (click)="prepareEdit(event)"
+                  class="btn btn-sm btn-outline-primary"
+                >
+                  <i class="fas fa-edit"></i>
+                </button>
+                <button
+                  (click)="onDelete(event.idEvent)"
+                  class="btn btn-sm btn-outline-danger"
+                >
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -12,10 +12,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private authService: AuthService
-  ) // private messageService: MessageService
-
-  {}
+    private authService: AuthService // private messageService: MessageService
+  ) {}
   loginForm!: FormGroup;
 
   ngOnInit() {
@@ -32,9 +30,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.signIn({ identifiant, password }).subscribe({
       next: (res) => {
         this.authService.saveTokens(res);
-        console.log("Réponse backend:", res);
-        console.log("Token sauvegardé:", this.authService.getAccessToken());
-        console.log("isAuthenticated:", this.authService.isAuthenticated());
         // this.router.navigate(['/dashboard']);
         this.router.navigate(["/dashboard"]).then((ok) => {
           console.log("Navigation réussie ?", ok);
