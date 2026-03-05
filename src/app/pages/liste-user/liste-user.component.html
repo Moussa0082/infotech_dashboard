@@ -26,7 +26,6 @@
                     [(ngModel)]="form.nom"
                     name="nom"
                     class="form-control"
-                    placeholder="Toure"
                   />
                 </div>
               </div>
@@ -38,7 +37,6 @@
                     [(ngModel)]="form.prenom"
                     name="prenom"
                     class="form-control"
-                    placeholder="Issa"
                   />
                 </div>
               </div>
@@ -53,7 +51,6 @@
                     [(ngModel)]="form.username"
                     name="username"
                     class="form-control"
-                    placeholder="issa"
                   />
                 </div>
               </div>
@@ -80,7 +77,6 @@
                 [(ngModel)]="form.email"
                 name="email"
                 class="form-control"
-                placeholder="issa@gmail.com"
               />
             </div>
 
@@ -91,7 +87,6 @@
                 [(ngModel)]="form.telephone"
                 name="telephone"
                 class="form-control"
-                placeholder="78787878"
               />
             </div>
 
@@ -186,7 +181,7 @@
                     <i class="fas fa-edit"></i>
                   </button>
                   <button
-                    (click)="onDelete(user.id)"
+                    (click)="onDelete(user.idUser)"
                     class="btn btn-sm btn-danger"
                   >
                     <i class="fas fa-trash"></i>

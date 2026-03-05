@@ -19,6 +19,7 @@ export class AuthInterceptor implements HttpInterceptor {
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
     const accessToken = this.authService.getAccessToken();
+    console.log("Token envoyé :", accessToken);
     let authReq = req;
 
     // On n'ajoute pas le Bearer Token si c'est la requête de refresh (elle a déjà le sien)

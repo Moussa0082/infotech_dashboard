@@ -17,7 +17,7 @@ export class ListeUserComponent implements OnInit {
   users: User[] = [];
 
   form: any = {
-    id: "",
+    idUser: "",
     nom: "",
     prenom: "",
     username: "",
@@ -43,19 +43,26 @@ export class ListeUserComponent implements OnInit {
 
   onSubmit() {
     if (this.isEdit) {
-      this.userService.update(this.form.id, this.form).subscribe({
+      this.userService.update(this.form.idUser, this.form).subscribe({
         next: () => {
           this.toastr.success("Utilisateur mis à jour");
           this.resetForm();
           this.loadUsers();
         },
+        error: (err) => this.toastr.error("Erreur de mise à jour"),
       });
     } else {
-      this.userService.create(this.form).subscribe({
+      const userToCreate = { ...this.form };
+      delete userToCreate.idUser;
+      this.userService.create(userToCreate).subscribe({
         next: () => {
           this.toastr.success("Utilisateur créé avec succès");
           this.resetForm();
           this.loadUsers();
+        },
+        error: (err) => {
+          console.error(err);
+          this.toastr.error("Email ou Username déjà utilisé !");
         },
       });
     }
@@ -91,7 +98,7 @@ export class ListeUserComponent implements OnInit {
   resetForm() {
     this.isEdit = false;
     this.form = {
-      id: "",
+      idUser: "",
       nom: "",
       prenom: "",
       username: "",

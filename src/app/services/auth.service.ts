@@ -50,6 +50,9 @@ export class AuthService {
   private baseUrl: string = "auth";
   constructor(private http: HttpClient) {
     this.serviceUrl = environment.apiUrl;
+    this.accessToken = sessionStorage.getItem("token");
+    this.refreshToken = sessionStorage.getItem("refreshToken");
+    this.currentUsername = sessionStorage.getItem("username");
   }
   /**
    * 1. Connexion de l'utilisateur
@@ -126,12 +129,16 @@ export class AuthService {
     sessionStorage.removeItem("username");
   }
 
+  // public getAccessToken(): string | null {
+  //   // Si la variable en mémoire est vide, on tente de la récupérer dans le storage
+  //   if (!this.accessToken) {
+  //     this.accessToken = sessionStorage.getItem("token");
+  //   }
+  //   return this.accessToken;
+  // }
   public getAccessToken(): string | null {
-    // Si la variable en mémoire est vide, on tente de la récupérer dans le storage
-    if (!this.accessToken) {
-      this.accessToken = sessionStorage.getItem("token");
-    }
-    return this.accessToken;
+    // On donne la priorité à la session pour éviter le "null" après un F5
+    return sessionStorage.getItem("token");
   }
 
   public getRefreshToken(): string | null {
@@ -139,7 +146,10 @@ export class AuthService {
   }
 
   public isAuthenticated(): boolean {
-    return !!this.accessToken || !!sessionStorage.getItem("refreshToken");
+    const token = this.accessToken || sessionStorage.getItem("token");
+    const refresh = sessionStorage.getItem("refreshToken");
+
+    return !!token || !!refresh;
   }
 
   public updateAccessToken(newToken: string) {
