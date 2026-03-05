@@ -11,47 +11,48 @@ import { CResponse } from '../models/CResponse';
 export class CategorieService {
 
   private serviceUrl: string;
+  private baseUrl: string = "categorie";
     constructor(private http: HttpClient) { 
       this.serviceUrl = environment.apiUrl;
     }
 
     /** ➕ Créer une catégorie */
     create(categorie: Categorie): Observable<CResponse> {
-      return this.http.post<CResponse>(`${this.serviceUrl}/create`, categorie);
+      return this.http.post<CResponse>(`${this.serviceUrl}/${this.baseUrl}/create`, categorie);
     }
   
     /** ✏️ Mettre à jour une catégorie */
     update(idCategorie: string, categorie: Categorie): Observable<CResponse> {
-      return this.http.put<CResponse>(`${this.serviceUrl}/update/${idCategorie}`, categorie);
+      return this.http.put<CResponse>(`${this.serviceUrl}/${this.baseUrl}/update/${idCategorie}`, categorie);
     }
   
     /** 🔍 Récupérer toutes les catégories */
     getAll(): Observable<Categorie[]> {
-      return this.http.get<Categorie[]>(`${this.serviceUrl}/getAllCategorie`);
+      return this.http.get<Categorie[]>(`${this.serviceUrl}/${this.baseUrl}/getAllCategorie`);
     }
   
     /** 🔍 Récupérer une catégorie par ID */
     getById(idCategorie: string): Observable<Categorie> {
-      return this.http.get<Categorie>(`${this.serviceUrl}/getById/${idCategorie}`);
+      return this.http.get<Categorie>(`${this.serviceUrl}/${this.baseUrl}/getById/${idCategorie}`);
     }
   
     /** 🗑️ Supprimer une catégorie */
     delete(idCategorie: string): Observable<void> {
-      return this.http.delete<void>(`${this.serviceUrl}/delete/${idCategorie}`);
+      return this.http.delete<void>(`${this.serviceUrl}/${this.baseUrl}/delete/${idCategorie}`);
     }
   
     /** 🚫 Désactiver une catégorie */
     deactivate(idCategorie: string): Observable<void> {
-      return this.http.post<void>(`${this.serviceUrl}/${idCategorie}/deactivater`, {});
+      return this.http.post<void>(`${this.serviceUrl}/${this.baseUrl}/${idCategorie}/deactivater`, {});
     }
   
     /** ✅ Activer une catégorie */
     activate(idCategorie: string): Observable<void> {
-      return this.http.post<void>(`${this.serviceUrl}/${idCategorie}/activater`, {});
+      return this.http.post<void>(`${this.serviceUrl}/${this.baseUrl}/${idCategorie}/activater`, {});
     }
   
     /** 🔎 Trouver les catégories par type (TypeCategorie enum côté backend) */
     findByType(typeCategorie: string): Observable<Categorie[]> {
-      return this.http.get<Categorie[]>(`${this.serviceUrl}/findByTypeCategrie/${typeCategorie}`);
+      return this.http.get<Categorie[]>(`${this.serviceUrl}/${this.baseUrl}/findByTypeCategrie/${typeCategorie}`);
     }
 }

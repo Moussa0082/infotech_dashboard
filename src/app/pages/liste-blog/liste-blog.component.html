@@ -1,0 +1,170 @@
+<div class="header bg-gradient-success pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body text-center mb-5">
+      <h1 class="text-white">
+        <i class="ni ni-caps-small mr-3"></i>Gestion du Blog
+      </h1>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-4 mb-5">
+      <div class="card shadow border-0">
+        <div class="card-header bg-white">
+          <h3 class="mb-0">{{ isEdit ? "Modifier" : "Rédiger" }} un article</h3>
+        </div>
+        <div class="card-body bg-secondary">
+          <form (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <label class="form-control-label">Titre de l'article</label>
+              <input
+                type="text"
+                [(ngModel)]="form.titre"
+                name="titre"
+                class="form-control"
+                placeholder="Titre accrocheur"
+              />
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-control-label">Auteur</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="form.auteur"
+                    name="auteur"
+                    class="form-control"
+                    placeholder="Nom"
+                  />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label class="form-control-label">Catégorie</label>
+                  <select
+                    [(ngModel)]="form.categorieId"
+                    name="cat"
+                    class="form-control"
+                  >
+                    <option
+                      *ngFor="let c of categories"
+                      [value]="c.idCategorie"
+                    >
+                      {{ c.nom }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-control-label">Contenu / Description</label>
+              <textarea
+                [(ngModel)]="form.description"
+                name="desc"
+                rows="5"
+                class="form-control"
+              ></textarea>
+            </div>
+
+            <div class="form-group" *ngIf="!isEdit">
+              <label class="form-control-label">Image de couverture</label>
+              <div class="custom-file">
+                <input
+                  type="file"
+                  (change)="onFileSelected($event)"
+                  class="custom-file-input"
+                  id="blogFile"
+                />
+                <label class="custom-file-label" for="blogFile">{{
+                  fileName || "Choisir une image"
+                }}</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success w-100 mt-3">
+              {{ isEdit ? "Mettre à jour" : "Publier l'article" }}
+            </button>
+            <button
+              *ngIf="isEdit"
+              type="button"
+              (click)="resetForm()"
+              class="btn btn-link text-muted w-100"
+            >
+              Annuler
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xl-8">
+      <div class="row">
+        <div class="col-lg-6 mb-4" *ngFor="let blog of blogs">
+          <div class="card card-lift--hover shadow border-0">
+            <div class="position-relative">
+              <img
+                [src]="utils.getImageUrl(blog.image)"
+                class="card-img-top"
+                style="height: 200px; object-fit: cover"
+              />
+              <span
+                class="badge badge-success position-absolute"
+                style="top: 10px; left: 10px"
+                >{{ blog.dateCreation | date : "dd/MM/yyyy" }}</span
+              >
+            </div>
+            <div class="card-body py-4">
+              <h5 class="text-success text-uppercase">{{ blog.titre }}</h5>
+              <p class="description mt-3">
+                {{ blog.description | slice : 0 : 120 }}...
+              </p>
+              <div class="mt-3">
+                <small class="text-muted"
+                  ><i class="ni ni-single-02 mr-1"></i> Par
+                  <strong>{{ blog.auteur }}</strong></small
+                >
+              </div>
+              <div
+                class="d-flex justify-content-between align-items-center mt-4 border-top pt-3"
+              >
+                <div>
+                  <button
+                    (click)="prepareEdit(blog)"
+                    class="btn btn-sm btn-primary btn-icon"
+                  >
+                    <i class="fas fa-edit"></i>
+                  </button>
+                  <button
+                    (click)="onDelete(blog.idBlog)"
+                    class="btn btn-sm btn-danger btn-icon"
+                  >
+                    <i class="fas fa-trash"></i>
+                  </button>
+                </div>
+                <label class="custom-toggle mb-0">
+                  <input
+                    type="checkbox"
+                    [checked]="blog.active"
+                    (change)="toggleStatus(blog)"
+                  />
+                  <span class="custom-toggle-slider rounded-circle"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div
+        *ngIf="blogs.length === 0"
+        class="card bg-secondary shadow border-0 text-center p-5"
+      >
+        <h3 class="text-muted">Aucun article de blog pour le moment</h3>
+      </div>
+    </div>
+  </div>
+</div>

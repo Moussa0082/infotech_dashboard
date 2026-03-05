@@ -1,19 +1,19 @@
-import { Injectable } from '@angular/core';
-import { CResponse } from '../models/CResponse';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Observable } from 'rxjs';
-import { Blog } from '../models/Blog';
+import { Injectable } from "@angular/core";
+import { CResponse } from "../models/CResponse";
+import { HttpClient } from "@angular/common/http";
+import { environment } from "src/environments/environment";
+import { Observable } from "rxjs";
+import { Blog } from "../models/Blog";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class BlogService {
-
   private serviceUrl: string;
-      constructor(private http: HttpClient) { 
-        this.serviceUrl = environment.apiUrl;
-      }
+  private baseUrl: string = "blog";
+  constructor(private http: HttpClient) {
+    this.serviceUrl = environment.apiUrl;
+  }
 
   /**
    * 1. CRÉATION (avec Fichier Image)
@@ -29,22 +29,26 @@ export class BlogService {
     titre: string,
     description: string,
     auteur: string,
-    categorieId: string, // ou number selon votre backend
+    idCategorie: string, // ou number selon votre backend
     imageFile: File
   ): Observable<CResponse> {
     const formData = new FormData();
-    
+
     // Ajoutez tous les champs de texte
-    formData.append('titre', titre);
-    formData.append('description', description);
-    formData.append('auteur', auteur);
-    formData.append('categorie_id', categorieId);
-    
+    formData.append("titre", titre);
+    formData.append("description", description);
+    formData.append("auteur", auteur);
+    formData.append("idCategorie", idCategorie);
+    formData.append("active", "true");
+
     // Ajoutez le fichier image. Le nom de la clé ('image') doit correspondre au @RequestParam("image")
-    formData.append('image', imageFile, imageFile.name); 
+    formData.append("image", imageFile, imageFile.name);
 
     // Angular HttpClient va automatiquement définir l'en-tête Content-Type: multipart/form-data.
-    return this.http.post<CResponse>(`${this.serviceUrl}/create`, formData);
+    return this.http.post<CResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/create`,
+      formData
+    );
   }
 
   /**
@@ -54,48 +58,65 @@ export class BlogService {
    */
   updateBlog(idBlog: string, blogData: Partial<Blog>): Observable<CResponse> {
     // Partial<Blog> permet d'envoyer uniquement les champs modifiés
-    return this.http.put<CResponse>(`${this.serviceUrl}/update/${idBlog}`, blogData);
+    return this.http.put<CResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/update/${idBlog}`,
+      blogData
+    );
   }
 
   /**
    * 3. LECTURE - Tous les Blogs
    */
   getAllBlogs(): Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${this.serviceUrl}/getAllBlog`);
+    return this.http.get<Blog[]>(
+      `${this.serviceUrl}/${this.baseUrl}/getAllBlog`
+    );
   }
 
   /**
    * 4. LECTURE - Blog par ID
    */
   getBlogById(idBlog: string): Observable<Blog> {
-    return this.http.get<Blog>(`${this.serviceUrl}/getById/${idBlog}`);
+    return this.http.get<Blog>(
+      `${this.serviceUrl}/${this.baseUrl}/getById/${idBlog}`
+    );
   }
 
   /**
    * 5. LECTURE - Blogs par Catégorie
    */
   getBlogByCategory(idCategorie: string): Observable<Blog[]> {
-    return this.http.get<Blog[]>(`${this.serviceUrl}/getBlogByCategory/${idCategorie}`);
+    return this.http.get<Blog[]>(
+      `${this.serviceUrl}/${this.baseUrl}/getBlogByCategory/${idCategorie}`
+    );
   }
 
   /**
    * 6. SUPPRESSION (DELETE)
    */
   deleteBlog(idBlog: string): Observable<CResponse> {
-    return this.http.delete<CResponse>(`${this.serviceUrl}/delete/${idBlog}`);
+    return this.http.delete<CResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/delete/${idBlog}`
+    );
   }
 
   /**
    * 7. DÉSACTIVATION (POST)
    */
   deactivateBlog(idBlog: string): Observable<CResponse> {
-    return this.http.post<CResponse>(`${this.serviceUrl}/desactivate/${idBlog}`, {});
+    return this.http.post<CResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/desactivate/${idBlog}`,
+      {}
+    );
   }
 
   /**
    * 8. ACTIVATION (POST)
    */
   activateBlog(idBlog: string): Observable<CResponse> {
-    return this.http.post<CResponse>(`${this.serviceUrl}/activate/${idBlog}`, {});
+    return this.http.post<CResponse>(
+      `${this.serviceUrl}/${this.baseUrl}/activate/${idBlog}`,
+      {}
+    );
   }
 }

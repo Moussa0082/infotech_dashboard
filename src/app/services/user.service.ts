@@ -11,43 +11,44 @@ import { User } from '../models/User';
 export class UserService {
 
   private serviceUrl: string;
+  private baseUrl: string = "user";
   constructor(private http: HttpClient) { 
     this.serviceUrl = environment.apiUrl;
   }
 
    /** ➕ Créer un utilisateur */
    create(user: User): Observable<CResponse> {
-    return this.http.post<CResponse>(`${this.serviceUrl}/create`, user);
+    return this.http.post<CResponse>(`${this.serviceUrl}/${this.baseUrl}/create`, user);
   }
 
   /** ✏️ Mettre à jour un utilisateur */
   update(idUser: string, user: User): Observable<CResponse> {
-    return this.http.put<CResponse>(`${this.serviceUrl}/update/${idUser}`, user);
+    return this.http.put<CResponse>(`${this.serviceUrl}/${this.baseUrl}/update/${idUser}`, user);
   }
 
   /** 🔍 Récupérer tous les utilisateurs */
   getAllUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`${this.serviceUrl}/getAllUser`);
+    return this.http.get<User[]>(`${this.serviceUrl}/${this.baseUrl}/getAllUser`);
   }
 
   /** 🔍 Récupérer un utilisateur par ID */
   getById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.serviceUrl}/getById/${id}`);
+    return this.http.get<User>(`${this.serviceUrl}/${this.baseUrl}/getById/${id}`);
   }
 
   /** 🗑️ Supprimer un utilisateur */
   deleteUser(idUser: string): Observable<CResponse> {
-    return this.http.delete<CResponse>(`${this.serviceUrl}/deleteUser/${idUser}`);
+    return this.http.delete<CResponse>(`${this.serviceUrl}/${this.baseUrl}/deleteUser/${idUser}`);
   }
 
   /** 🚫 Désactiver un utilisateur */
   deactivate(idUser: string): Observable<CResponse> {
-    return this.http.post<CResponse>(`${this.serviceUrl}/desactivate/${idUser}`, {});
+    return this.http.post<CResponse>(`${this.serviceUrl}/${this.baseUrl}/desactivate/${idUser}`, {});
   }
 
   /** ✅ Activer un utilisateur */
   activate(idUser: string): Observable<CResponse> {
-    return this.http.post<CResponse>(`${this.serviceUrl}/activater/${idUser}`, {});
+    return this.http.post<CResponse>(`${this.serviceUrl}/${this.baseUrl}/activater/${idUser}`, {});
   }
 
 }
